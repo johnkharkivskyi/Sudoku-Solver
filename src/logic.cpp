@@ -26,9 +26,9 @@ bool isValidBox(const SudokuBoard& board, int startRow, int startCol) {
     bool used[10] = {};
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            if (board.grid[i][j] != 0) {
-                if (used[board.grid[i][j]]) return false;
-                used[board.grid[i][j]] = true;
+            if (board.grid[startRow + i][startCol + j] != 0) {
+                if (used[board.grid[startRow + i][startCol + j]]) return false;
+                used[board.grid[startRow + i][startCol + j]] = true;
             }
         }
     }
