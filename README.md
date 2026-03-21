@@ -20,8 +20,6 @@ Future assignments will extend this project with additional functionality such a
 
 ## Project Structure
 
-Example project structure:
-
 ```
 Sudoku/
 │
@@ -42,19 +40,13 @@ Sudoku/
 
 ## Build Instructions
 
-Example using **g++**:
-
 ```
 g++ -std=c++17 src/*.cpp -o sudoku
 ```
 
-If you are using another compiler or build system, update this section accordingly.
-
 ---
 
 ## Run Instructions
-
-Example:
 
 ```
 ./sudoku
