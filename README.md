@@ -21,7 +21,7 @@ Future assignments will extend this project with additional functionality such a
 ## Project Structure
 
 ```
-Sudoku/
+Sudoku-Solver/
 │
 ├── src/
 │   ├── main.cpp
