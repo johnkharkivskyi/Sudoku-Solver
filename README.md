@@ -14,6 +14,8 @@ Current functionality:
 - Printing a Sudoku board
 - Validating whether the board configuration is correct
 
+This version features transition to OOP principle.
+
 Future assignments will extend this project with additional functionality such as solving Sudoku puzzles.
 
 ---
@@ -30,8 +32,6 @@ Sudoku-Solver/
 │
 ├── include/
 │   ├── types.h
-│   ├── io.h
-│   ├── logic.h
 │
 └── README.md
 ```

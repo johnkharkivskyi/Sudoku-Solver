@@ -1,6 +1,6 @@
-#include "../include/io.h"
+#include "../include/types.h"
 
-void readSudoku(SudokuBoard& board, std::istream& in) {
+void SudokuBoard::read(std::istream& in) {
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             char value;
@@ -8,15 +8,15 @@ void readSudoku(SudokuBoard& board, std::istream& in) {
                 throw std::runtime_error("Invalid input: expected integer (0-9)");
             }
 
-            board.grid[i][j] = value - '0';
+            grid[i][j] = value - '0';
         }
     }
 }
 
-void printSudoku(const SudokuBoard& board, std::ostream& out) {
+void SudokuBoard::print(std::ostream& out) const {
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
-            out << board.grid[i][j];
+            out << grid[i][j];
         }
         out << '\n';
     }
