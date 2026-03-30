@@ -1,10 +1,12 @@
 #include "../include/types.h"
 
 bool SudokuBoard::isValidRow(int row) const {
-    bool used[10] = {};
-    for (int i = 0; i < 9; i++) {
+    bool used[BOARD_SIZE + 1] = {};
+    for (int i = 0; i < BOARD_SIZE; i++) {
         if (grid[row][i] != 0) {
-            if (used[grid[row][i]]) return false;
+            if (used[grid[row][i]]) {
+                return false;
+            }
             used[grid[row][i]] = true;
         }
     }
@@ -12,10 +14,12 @@ bool SudokuBoard::isValidRow(int row) const {
 }
 
 bool SudokuBoard::isValidColumn(int col) const {
-    bool used[10] = {};
-    for (int i = 0; i < 9; i++) {
+    bool used[BOARD_SIZE + 1] = {};
+    for (int i = 0; i < BOARD_SIZE; i++) {
         if (grid[i][col] != 0) {
-            if (used[grid[i][col]]) return false;
+            if (used[grid[i][col]]) {
+                return false;
+            }
             used[grid[i][col]] = true;
         }
     }
@@ -23,11 +27,13 @@ bool SudokuBoard::isValidColumn(int col) const {
 }
 
 bool SudokuBoard::isValidBox(int startRow, int startCol) const {
-    bool used[10] = {};
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
+    bool used[BOARD_SIZE + 1] = {};
+    for (int i = 0; i < SUBBOARDS_PER_ROW; i++) {
+        for (int j = 0; j < SUBBOARDS_PER_ROW; j++) {
             if (grid[startRow + i][startCol + j] != 0) {
-                if (used[grid[startRow + i][startCol + j]]) return false;
+                if (used[grid[startRow + i][startCol + j]]) {
+                    return false;
+                }
                 used[grid[startRow + i][startCol + j]] = true;
             }
         }
@@ -36,15 +42,17 @@ bool SudokuBoard::isValidBox(int startRow, int startCol) const {
 }
 
 bool SudokuBoard::isValid() const {
-    for (int i = 0; i < 9; i++) {
-        if (!isValidRow(i) || !isValidColumn(i))
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        if (!isValidRow(i) || !isValidColumn(i)) {
             return false;
+        }
     }
 
-    for (int i = 0; i < 9; i += 3) {
-        for (int j = 0; j < 9; j += 3) {
-            if (!isValidBox(i, j))
+    for (int i = 0; i < BOARD_SIZE; i += BOARD_SIZE / SUBBOARDS_PER_ROW) {
+        for (int j = 0; j < BOARD_SIZE; j += BOARD_SIZE / SUBBOARDS_PER_ROW) {
+            if (!isValidBox(i, j)) {
                 return false;
+            }
         }
     }
 

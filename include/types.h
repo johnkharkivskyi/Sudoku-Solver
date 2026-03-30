@@ -1,8 +1,9 @@
-#ifndef TYPES_H_INCLUDED
-#define TYPES_H_INCLUDED
+#pragma once
 
 #include "iostream"
-#include "stdexcept"
+
+const int BOARD_SIZE = 9;
+const int SUBBOARDS_PER_ROW = 3;
 
 class SudokuBoard {
 public:
@@ -11,11 +12,9 @@ public:
     bool isValid() const;
 
 private:
-    int grid[9][9] = {};
+    int grid[BOARD_SIZE][BOARD_SIZE] = {};
 
     bool isValidRow(int row) const;
     bool isValidColumn(int col) const;
     bool isValidBox(int startRow, int startCol) const;
 };
-
-#endif // TYPES_H_INCLUDED

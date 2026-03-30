@@ -9,9 +9,11 @@ int main() {
     std::cout << "Printed Sudoku Board:\n";
     board.print();
 
-    if (board.isValid())
+    if (board.isValid()) {
         std::cout << "This Sudoku board is valid\n";
-    else std::cout << "This Sudoku board is invalid\n";
+    } else {
+        std::cout << "This Sudoku board is invalid\n";
+    }
 
     return 0;
 }

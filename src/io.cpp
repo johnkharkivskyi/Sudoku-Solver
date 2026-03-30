@@ -1,3 +1,4 @@
+#include "stdexcept"
 #include "../include/types.h"
 
 void SudokuBoard::read(std::istream& in) {
@@ -16,7 +17,7 @@ void SudokuBoard::read(std::istream& in) {
 void SudokuBoard::print(std::ostream& out) const {
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
-            out << grid[i][j];
+            out << grid[i][j] << ' ';
         }
         out << '\n';
     }
