@@ -28,12 +28,12 @@ Sudoku-Solver/
 │
 ├── src/
 │   ├── main.cpp
-│   ├── io.cpp
-│   ├── logic.cpp
+│   ├── board.cpp
 │   ├── solver.cpp
 │
 ├── include/
-│   ├── types.h
+│   ├── board.h
+│   ├── solver.h
 │
 └── README.md
 ```

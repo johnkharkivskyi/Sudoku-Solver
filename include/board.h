@@ -4,7 +4,9 @@
 
 const int BOARD_SIZE = 9;
 const int SUBBOARDS_PER_ROW = 3;
+const int BOX_SIZE = 3;
 const int MAX_SUDOKU_DIGIT = 9;
+const int EMPTY = 0;
 
 class SudokuBoard {
 public:
@@ -21,9 +23,4 @@ private:
     bool isValidRow(int row) const;
     bool isValidColumn(int col) const;
     bool isValidBox(int startRow, int startCol) const;
-};
-
-class Solver {
-public:
-    bool solve(SudokuBoard& board);
 };
