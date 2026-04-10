@@ -1,4 +1,5 @@
 #include "../include/types.h"
+#include "stdexcept"
 
 bool SudokuBoard::isValidRow(int row) const {
     bool used[BOARD_SIZE + 1] = {};
@@ -57,4 +58,21 @@ bool SudokuBoard::isValid() const {
     }
 
     return true;
+}
+
+int SudokuBoard::getCell(int row, int col) const {
+    if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
+        throw std::out_of_range("Index out of bounds");
+    }
+    return grid[row][col];
+}
+
+void SudokuBoard::setCell(int row, int col, int value) {
+    if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
+        throw std::out_of_range("Index out of bounds");
+    }
+    if (value < 0 || value > MAX_SUDOKU_DIGIT) {
+        throw std::invalid_argument("Value must be from 0 to 9");
+    }
+    grid[row][col] = value;
 }

@@ -13,10 +13,11 @@ Current functionality:
 - Reading a Sudoku board
 - Printing a Sudoku board
 - Validating whether the board configuration is correct
+- Solving a board with a backtracking method
 
-This version features transition to OOP principle.
+This version features a solver using Composition principle of OOP.
 
-Future assignments will extend this project with additional functionality such as solving Sudoku puzzles.
+Future assignments will extend this project with additional functionality such as solving Sudoku puzzles in different ways.
 
 ---
 
@@ -29,6 +30,7 @@ Sudoku-Solver/
 │   ├── main.cpp
 │   ├── io.cpp
 │   ├── logic.cpp
+│   ├── solver.cpp
 │
 ├── include/
 │   ├── types.h

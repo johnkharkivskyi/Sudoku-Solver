@@ -11,6 +11,13 @@ int main() {
 
     if (board.isValid()) {
         std::cout << "This Sudoku board is valid\n";
+        Solver solver;
+        if (solver.solve(board)) {
+            std::cout << "\nSuccessfully solved:\n";
+            board.print();
+        } else {
+            std::cout << "\nFailed to solve sudoku\n";
+        }
     } else {
         std::cout << "This Sudoku board is invalid\n";
     }
