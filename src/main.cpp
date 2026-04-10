@@ -1,4 +1,5 @@
-#include "../include/types.h"
+#include "../include/board.h"
+#include "../include/solver.h"
 
 int main() {
     SudokuBoard board;
