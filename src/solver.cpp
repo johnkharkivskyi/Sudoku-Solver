@@ -1,81 +1,113 @@
 #include "../include/solver.h"
 
-bool BacktrackingSolver::solve(SudokuBoard& board) {
-    int row, col;
-
-    if (!findEmptyCell(board, row, col)) {
-        return board.isValid();
+std::optional<SudokuBoard> BacktrackingSolver::solve(const SudokuBoard& board) const {
+    if (isSolved(board)) {
+        return board;
     }
 
-    return tryPlacingDigits(board, row, col);
+    for (const auto& move : getMoves(board)) {
+        SudokuBoard next = applyMove(board, move);
+        auto result = solve(next);
+        if (result) {
+            return result;
+        }
+    }
+
+    return std::nullopt;
 }
 
-bool BacktrackingSolver::findEmptyCell(const SudokuBoard& board, int& row, int& col) const {
-    for (row = 0; row < BOARD_SIZE; row++) {
-        for (col = 0; col < BOARD_SIZE; col++) {
-            if (board.getCell(row, col) == EMPTY) {
-                return true;
+bool BacktrackingSolver::isSolved(const SudokuBoard& board) const {
+    for (int r = 0; r < BOARD_SIZE; ++r) {
+        for (int c = 0; c < BOARD_SIZE; ++c) {
+            if (board.getCell(r, c) == EMPTY) {
+                return false;
             }
         }
     }
-    return false;
+    return board.isValid();
 }
 
-bool BacktrackingSolver::tryPlacingDigits(SudokuBoard& board, int row, int col) {
-    for (int num = 1; num <= MAX_SUDOKU_DIGIT; num++) {
-        board.setCell(row, col, num);
+std::vector<Move> BacktrackingSolver::getMoves(const SudokuBoard& board) const {
+    std::vector<Move> moves;
 
-        if (board.isValid()) {
-            if (solve(board)) {
-                return true;
+    for (int r = 0; r < BOARD_SIZE; ++r) {
+        for (int c = 0; c < BOARD_SIZE; ++c) {
+            if (board.getCell(r, c) == EMPTY) {
+                for (int v = 1; v <= MAX_SUDOKU_DIGIT; ++v) {
+                    SudokuBoard testBoard = applyMove(board, {r, c, v});
+                    if (testBoard.isValid()) {
+                        moves.push_back({r, c, v});
+                    }
+                }
+                return moves;
             }
         }
-
-        board.setCell(row, col, EMPTY);
     }
-    return false;
+    return moves;
 }
 
-bool SimpleSolver::solve(SudokuBoard& board) {
+SudokuBoard BacktrackingSolver::applyMove(const SudokuBoard& board, const Move& move) const {
+    SudokuBoard nextBoard = board;
+    nextBoard.setCell(move.row, move.col, move.value);
+    return nextBoard;
+}
+
+
+std::optional<SudokuBoard> SimpleSolver::solve(const SudokuBoard& board) const {
+    SudokuBoard current = board;
     bool madeProgress = true;
+
     while (madeProgress) {
-        madeProgress = tryFilling(board);
+        auto nextBoard = tryFilling(current);
+        if (nextBoard) {
+            current = nextBoard.value();
+        } else {
+            madeProgress = false;
+        }
     }
 
-    return isBoardFull(board) && board.isValid();
+    if (isBoardFull(current) && current.isValid()) {
+        return current;
+    }
+
+    return std::nullopt;
 }
 
-bool SimpleSolver::tryFilling(SudokuBoard& board) {
+std::optional<SudokuBoard> SimpleSolver::tryFilling(const SudokuBoard& board) const {
+    SudokuBoard next = board;
     bool progress = false;
 
     for (int row = 0; row < BOARD_SIZE; ++row) {
         for (int col = 0; col < BOARD_SIZE; ++col) {
-            if (board.getCell(row, col) == EMPTY) {
-                int digit = findSingleValidDigit(board, row, col);
+            if (next.getCell(row, col) == EMPTY) {
+                int digit = findSingleValidDigit(next, row, col);
                 if (digit != EMPTY) {
-                    board.setCell(row, col, digit);
+                    next.setCell(row, col, digit);
                     progress = true;
                 }
             }
         }
     }
 
-    return progress;
+    if (progress) {
+        return next;
+    }
+    return std::nullopt;
 }
 
-int SimpleSolver::findSingleValidDigit(SudokuBoard& board, int row, int col) {
+int SimpleSolver::findSingleValidDigit(const SudokuBoard& board, int row, int col) const {
     int validCount = 0;
     int lastValidDigit = EMPTY;
 
     for (int num = 1; num <= MAX_SUDOKU_DIGIT; ++num) {
-        board.setCell(row, col, num);
-        if (board.isValid()) {
+        SudokuBoard testBoard = board;
+        testBoard.setCell(row, col, num);
+
+        if (testBoard.isValid()) {
             validCount++;
             lastValidDigit = num;
         }
     }
-
-    board.setCell(row, col, EMPTY);
 
     if (validCount == 1) {
         return lastValidDigit;

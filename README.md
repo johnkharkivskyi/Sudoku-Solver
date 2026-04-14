@@ -16,7 +16,7 @@ Current functionality:
 - Solving a board with a simple method
 - Solving a board with a backtracking method
 
-This version features multiple solvers (Simple solver and Backtracking solver) using Polymorphism principle of OOP.
+This version features transition to functional solvers with immutability.
 
 Future assignments will extend this project with additional functionality such as solving Sudoku puzzles in different ways.
 
