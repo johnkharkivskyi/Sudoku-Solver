@@ -13,9 +13,10 @@ Current functionality:
 - Reading a Sudoku board
 - Printing a Sudoku board
 - Validating whether the board configuration is correct
+- Solving a board with a simple method
 - Solving a board with a backtracking method
 
-This version features a solver using Composition principle of OOP.
+This version features multiple solvers (Simple solver and Backtracking solver) using Polymorphism principle of OOP.
 
 Future assignments will extend this project with additional functionality such as solving Sudoku puzzles in different ways.
 
@@ -58,6 +59,8 @@ The program expects a Sudoku board from standard input.
 
 Example input:
 
+Easy board
+
 ```
 530070000
 600195000
@@ -70,6 +73,19 @@ Example input:
 000080079
 ```
 
+Hard board
+
+```
+009586000
+000020000
+400000683
+900650032
+060700098
+030200704
+003000000
+620015040
+000400050
+```
 ---
 
 ## Author
