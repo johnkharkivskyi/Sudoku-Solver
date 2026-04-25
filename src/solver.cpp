@@ -6,8 +6,7 @@ std::optional<SudokuBoard> BacktrackingSolver::solve(const SudokuBoard& board) c
     }
 
     for (const auto& move : getMoves(board)) {
-        SudokuBoard next = applyMove(board, move);
-        auto result = solve(next);
+        auto result = solve(applyMove(board, move));
         if (result) {
             return result;
         }
@@ -24,32 +23,58 @@ bool BacktrackingSolver::isSolved(const SudokuBoard& board) const {
             }
         }
     }
+
     return board.isValid();
 }
 
 std::vector<Move> BacktrackingSolver::getMoves(const SudokuBoard& board) const {
+    auto candidates = generateCandidates(board);
+
+    return filterMoves(
+        candidates,
+        [&](const Move& move) {
+            return isValidMove(board, move);
+        }
+    );
+}
+
+std::vector<Move> BacktrackingSolver::generateCandidates(const SudokuBoard& board) const {
     std::vector<Move> moves;
 
     for (int r = 0; r < BOARD_SIZE; ++r) {
         for (int c = 0; c < BOARD_SIZE; ++c) {
             if (board.getCell(r, c) == EMPTY) {
                 for (int v = 1; v <= MAX_SUDOKU_DIGIT; ++v) {
-                    SudokuBoard testBoard = applyMove(board, {r, c, v});
-                    if (testBoard.isValid()) {
-                        moves.push_back({r, c, v});
-                    }
+                    moves.push_back({r, c, v});
                 }
                 return moves;
             }
         }
     }
+
     return moves;
 }
 
+std::vector<Move> BacktrackingSolver::filterMoves(const std::vector<Move>& moves, Predicate predicate) const {
+    std::vector<Move> result;
+
+    for (const auto& move : moves) {
+        if (predicate(move)) {
+            result.push_back(move);
+        }
+    }
+
+    return result;
+}
+
+bool BacktrackingSolver::isValidMove(const SudokuBoard& board, const Move& move) const {
+    return applyMove(board, move).isValid();
+}
+
 SudokuBoard BacktrackingSolver::applyMove(const SudokuBoard& board, const Move& move) const {
-    SudokuBoard nextBoard = board;
-    nextBoard.setCell(move.row, move.col, move.value);
-    return nextBoard;
+    SudokuBoard next = board;
+    next.setCell(move.row, move.col, move.value);
+    return next;
 }
 
 

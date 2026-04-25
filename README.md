@@ -16,7 +16,7 @@ Current functionality:
 - Solving a board with a simple method
 - Solving a board with a backtracking method
 
-This version features transition to functional solvers with immutability.
+This version features applying functional composition and data transformation techniques.
 
 Future assignments will extend this project with additional functionality such as solving Sudoku puzzles in different ways.
 

@@ -1,13 +1,17 @@
 #pragma once
+
 #include "../include/board.h"
 #include "optional"
 #include "vector"
+#include "functional"
 
 struct Move {
     int row;
     int col;
     int value;
 };
+
+using Predicate = std::function<bool(const Move&)>;
 
 class Solver {
 public:
@@ -21,7 +25,12 @@ public:
 
 private:
     bool isSolved(const SudokuBoard& board) const;
+
     std::vector<Move> getMoves(const SudokuBoard& board) const;
+    std::vector<Move> generateCandidates(const SudokuBoard& board) const;
+    std::vector<Move> filterMoves(const std::vector<Move>& moves, Predicate predicate) const;
+
+    bool isValidMove(const SudokuBoard& board, const Move& move) const;
     SudokuBoard applyMove(const SudokuBoard& board, const Move& move) const;
 };
 
