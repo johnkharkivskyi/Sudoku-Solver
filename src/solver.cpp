@@ -1,12 +1,22 @@
 #include "../include/solver.h"
 
 std::optional<SudokuBoard> BacktrackingSolver::solve(const SudokuBoard& board) const {
+    stats = SolverStats();
+    return solveRecursive(board);
+}
+
+std::optional<SudokuBoard> BacktrackingSolver::solveRecursive(const SudokuBoard& board) const {
+    stats.recursiveCalls++;
+
     if (isSolved(board)) {
         return board;
     }
 
     for (const auto& move : getMoves(board)) {
-        auto result = solve(applyMove(board, move));
+        stats.branchesTried++;
+
+        auto result = solveRecursive(applyMove(board, move));
+
         if (result) {
             return result;
         }
@@ -77,8 +87,7 @@ SudokuBoard BacktrackingSolver::applyMove(const SudokuBoard& board, const Move& 
     return next;
 }
 
-
-std::optional<SudokuBoard> SimpleSolver::solve(const SudokuBoard& board) const {
+SudokuBoard SimpleSolver::propagate(const SudokuBoard& board) const {
     SudokuBoard current = board;
     bool madeProgress = true;
 
@@ -90,6 +99,13 @@ std::optional<SudokuBoard> SimpleSolver::solve(const SudokuBoard& board) const {
             madeProgress = false;
         }
     }
+    return current;
+}
+
+std::optional<SudokuBoard> SimpleSolver::solve(const SudokuBoard& board) const {
+    stats = SolverStats();
+
+    SudokuBoard current = propagate(board);
 
     if (isBoardFull(current) && current.isValid()) {
         return current;
@@ -150,4 +166,65 @@ bool SimpleSolver::isBoardFull(const SudokuBoard& board) const {
         }
     }
     return true;
+}
+
+std::vector<Move> MRVSolver::generateCandidates(const SudokuBoard& board) const {
+    int minCandidates = 10;
+    int bestR = -1, bestC = -1;
+
+    for (int r = 0; r < BOARD_SIZE; ++r) {
+        for (int c = 0; c < BOARD_SIZE; ++c) {
+            if (board.getCell(r, c) == EMPTY) {
+                int validCount = 0;
+                for (int v = 1; v <= MAX_SUDOKU_DIGIT; ++v) {
+                    if (isValidMove(board, {r, c, v})) {
+                        validCount++;
+                    }
+                }
+                if (validCount < minCandidates) {
+                    minCandidates = validCount;
+                    bestR = r;
+                    bestC = c;
+                }
+            }
+        }
+    }
+
+    std::vector<Move> moves;
+    if (bestR != -1 && bestC != -1) {
+        // Validation handles invalid moves when returning to getMoves
+        for (int v = 1; v <= MAX_SUDOKU_DIGIT; ++v) {
+            moves.push_back({bestR, bestC, v});
+        }
+    }
+    return moves;
+}
+
+
+std::optional<SudokuBoard> MRVPropagationSolver::solve(const SudokuBoard& board) const {
+    stats = SolverStats();
+    return solveRecursiveWithPropagation(board);
+}
+
+std::optional<SudokuBoard> MRVPropagationSolver::solveRecursiveWithPropagation(const SudokuBoard& board) const {
+    stats.recursiveCalls++;
+
+    SimpleSolver simpleSolver;
+    SudokuBoard currentBoard = simpleSolver.propagate(board);
+
+    if (isSolved(currentBoard)) {
+        return currentBoard;
+    }
+
+    for (const auto& move : getMoves(currentBoard)) {
+        stats.branchesTried++;
+
+        auto result = solveRecursiveWithPropagation(applyMove(currentBoard, move));
+
+        if (result) {
+            return result;
+        }
+    }
+
+    return std::nullopt;
 }

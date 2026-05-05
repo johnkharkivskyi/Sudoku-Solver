@@ -98,4 +98,3 @@ bool SudokuBoard::isValidBox(int startRow, int startCol) const {
     }
     return true;
 }
-

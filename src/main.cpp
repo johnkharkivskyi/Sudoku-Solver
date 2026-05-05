@@ -6,9 +6,14 @@ int main() {
     SudokuBoard board;
 
     std::cout << "Input 9 lines with 9 digits each, where 0 represents an empty cell (no spaces):\n";
-    board.read();
+    try {
+        board.read();
+    } catch (const std::exception& e) {
+        std::cout << "Error reading board: " << e.what() << "\n";
+        return 1;
+    }
 
-    std::cout << "Printed Sudoku Board:\n";
+    std::cout << "\nPrinted Sudoku Board:\n";
     board.print();
 
     if (!board.isValid()) {
@@ -18,29 +23,51 @@ int main() {
 
     std::cout << "This Sudoku board is valid\n";
 
-    Solver* simpleSolver = new SimpleSolver();
-    Solver* backtrackingSolver = new BacktrackingSolver();
+    Solver* baselineSolver = new BacktrackingSolver();
+    Solver* mrvSolver = new MRVSolver();
+    Solver* mrvPropSolver = new MRVPropagationSolver();
 
-    auto simpleResult = simpleSolver->solve(board);
-    std::cout << "\nAttempt to solve the board with Simple Solver:\n";
-
-    if (simpleResult) {
-        simpleResult->print();
-        std::cout << "\nThis board was successfully solved with Simple Solver!\n";
+    std::cout << "\n--- Baseline Solver ---\n";
+    auto baselineResult = baselineSolver->solve(board);
+    if (baselineResult) {
+        std::cout << "Solved successfully.\n";
+        SolverStats stats = baselineSolver->getStats();
+        std::cout << "Recursive calls: " << stats.recursiveCalls << "\n";
+        std::cout << "Branches tried: " << stats.branchesTried << "\n";
     } else {
-        std::cout << "\nSimple Solver failed!\n";
-        auto backtrackingResult = backtrackingSolver->solve(board);
-        std::cout << "\nAttempt to solve the board with Backtracking Solver:\n";
-        if (backtrackingResult) {
-            backtrackingResult->print();
-            std::cout << "\nThis board was solved by Backtracking Solver.\n";
-        } else {
-            std::cout << "\nFailed to solve sudoku.\n";
-        }
+        std::cout << "Failed to solve.\n";
     }
 
-    delete simpleSolver;
-    delete backtrackingSolver;
+    std::cout << "\n--- MRV Solver ---\n";
+    auto mrvResult = mrvSolver->solve(board);
+    if (mrvResult) {
+        std::cout << "Solved successfully.\n";
+        SolverStats stats = mrvSolver->getStats();
+        std::cout << "Recursive calls: " << stats.recursiveCalls << "\n";
+        std::cout << "Branches tried: " << stats.branchesTried << "\n";
+    } else {
+        std::cout << "Failed to solve.\n";
+    }
+
+    std::cout << "\n--- MRV + Propagation Solver ---\n";
+    auto mrvPropResult = mrvPropSolver->solve(board);
+    if (mrvPropResult) {
+        std::cout << "Solved successfully.\n";
+        SolverStats stats = mrvPropSolver->getStats();
+        std::cout << "Recursive calls: " << stats.recursiveCalls << "\n";
+        std::cout << "Branches tried: " << stats.branchesTried << "\n";
+    } else {
+        std::cout << "Failed to solve.\n";
+    }
+
+    if (mrvPropResult) {
+        std::cout << "\nFinal Solved Board:\n";
+        mrvPropResult->print();
+    }
+
+    delete baselineSolver;
+    delete mrvSolver;
+    delete mrvPropSolver;
 
     return 0;
 }
