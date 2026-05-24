@@ -87,14 +87,21 @@ This stage shows why the earlier architecture mattered. MRV was added by changin
 The final project has a clearer structure than the early versions:
 
 ```text
-include/
-  board.h
-  solver.h
-
-src/
-  board.cpp
-  solver.cpp
-  main.cpp
+Sudoku-Solver/
+│
+├── src/
+│   ├── main.cpp
+│   ├── board.cpp
+│   ├── solver.cpp
+│
+├── include/
+│   ├── board.h
+│   ├── solver.h
+│
+├── report/
+│   ├── analysis.md
+│
+└── README.md
 ```
 
 The board code is responsible for representation and validation. Solver code is responsible for search strategies. `main.cpp` is responsible for input, output, and comparing solvers.
