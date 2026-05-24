@@ -17,18 +17,7 @@ Current functionality:
 - Solving a board with a backtracking method
 - Comparing different solver strategies using basic statistics
 
-This version includes optimized versions of the backtracking method:
-
-- **Baseline backtracking**: selects the first empty cell and tries all valid candidates
-- **Minimum Remaining Values (MRV)**: selects the empty cell with the fewest valid candidates
-- **MRV with propagation**: repeatedly fills cells that have only one valid candidate before recursive search
-
-The program also tracks and prints basic performance statistics:
-
-- Number of recursive calls
-- Number of attempted branches
-
-Future assignments will extend this project with additional functionality such as solving Sudoku puzzles in different ways.
+This version includes an `analysis.md` file in the `report` folder containing a full report comparing the programming paradigms used throughout the course and providing an overall reflection.
 
 ---
 
@@ -45,6 +34,9 @@ Sudoku-Solver/
 ├── include/
 │   ├── board.h
 │   ├── solver.h
+│
+├── report/
+│   ├── analysis.md
 │
 └── README.md
 ```
